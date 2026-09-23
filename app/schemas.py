@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -79,6 +80,7 @@ class SimulationResult(BaseModel):
 
 
 class AnalysisResult(BaseModel):
+    provider: str = "deterministic"
     summary: str
     strengths: list[str]
     risks: list[str]
@@ -103,3 +105,38 @@ class ComparisonResult(BaseModel):
     better_scenario: str
     score_difference: float
     explanation: str
+
+
+class RecommendationCandidate(BaseModel):
+    decisions: list[Decision]
+    score: float
+    improvement: float
+    budget_used: int
+    budget_remaining: int
+
+
+class RecommendationResult(BaseModel):
+    current_score: float
+    candidates: list[RecommendationCandidate]
+
+
+class SaveScenarioRequest(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+    team_name: str = Field(min_length=1, max_length=100)
+    scenario: ScenarioRequest
+
+
+class SavedScenario(BaseModel):
+    id: str
+    team_name: str
+    created_at: datetime
+    simulation: SimulationResult
+
+
+class LeaderboardEntry(BaseModel):
+    scenario_id: str
+    team_name: str
+    score: float
+    budget_used: int
+    created_at: datetime
