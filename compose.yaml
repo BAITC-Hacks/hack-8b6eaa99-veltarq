@@ -1,0 +1,13 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      VELTARQ_DB_PATH: /app/data/veltarq.db
+      VELTARQ_LLM_BASE_URL: ${VELTARQ_LLM_BASE_URL:-}
+      VELTARQ_LLM_MODEL: ${VELTARQ_LLM_MODEL:-}
+      VELTARQ_LLM_API_KEY: ${VELTARQ_LLM_API_KEY:-}
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
