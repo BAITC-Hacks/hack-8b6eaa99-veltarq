@@ -1,21 +1,40 @@
-name: Backend CI
+name: Project CI
 
 on:
   push:
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: pip
-      - name: Install dependencies
+          cache-dependency-path: backend/pyproject.toml
+      - name: Install frontend dependencies
+        run: npm ci
+      - name: Install backend dependencies
+        working-directory: backend
         run: python -m pip install -e ".[dev]"
-      - name: Lint
+      - name: Lint backend
+        working-directory: backend
         run: python -m ruff check .
-      - name: Test
+      - name: Test backend
+        working-directory: backend
         run: python -m pytest --cov=app --cov-report=term-missing --cov-fail-under=90
+      - name: Test frontend
+        run: npm test
+      - name: Test HTTP integration
+        run: npm run test:integration
+      - name: Build frontend
+        run: npm run build

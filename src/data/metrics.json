@@ -1,0 +1,7 @@
+[
+  {"districtId":"Есиль","name":"Есиль","short":"ЕС","description":"Левый берег и деловой центр столицы.","color":"#667f90","before":{"index":62.99,"newSchools":0,"newParks":0},"after":{"index":68.4,"newSchools":1,"newParks":1}},
+  {"districtId":"Алматы","name":"Алматы","short":"АЛ","description":"Юго-восточная часть городской территории.","color":"#bf806a","before":{"index":57.06,"newSchools":0,"newParks":0},"after":{"index":63.2,"newSchools":1,"newParks":1}},
+  {"districtId":"Сарыарка","name":"Сарыарка","short":"СА","description":"Историческая часть города на правом берегу.","color":"#baa167","before":{"index":54.65,"newSchools":0,"newParks":0},"after":{"index":60.1,"newSchools":1,"newParks":1}},
+  {"districtId":"Байконур","name":"Байконур","short":"БА","description":"Северо-восточные кварталы столицы.","color":"#779b89","before":{"index":56.63,"newSchools":0,"newParks":0},"after":{"index":62.7,"newSchools":1,"newParks":1}},
+  {"districtId":"Нура","name":"Нура","short":"НУ","description":"Западная часть левобережья.","color":"#9391af","before":{"index":49.18,"newSchools":0,"newParks":0},"after":{"index":57.3,"newSchools":1,"newParks":1}}
+]

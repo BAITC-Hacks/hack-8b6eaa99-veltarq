@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Астана — вариант интерфейса</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Onest:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="workspace">
+      <header class="topbar">
+        <div class="identity"><span class="identity-mark">А</span><span><strong>Астана</strong><small>Сценарная карта города</small></span></div>
+        <span class="data-note">Пять игровых зон · демонстрационные данные</span>
+        <div class="scenario-control" role="group" aria-label="Сценарий"><button id="before" type="button">До</button><button id="after" type="button" class="active">После</button></div>
+      </header>
+      <main class="content">
+        <aside class="rail">
+          <div class="rail-heading"><div><p class="section-label">01 / РАЙОНЫ</p><h1>Сравнение районов</h1></div><span>05</span></div>
+          <p class="rail-intro">Выберите зону, чтобы увидеть её показатели и условные решения на карте.</p>
+          <div class="column-head"><span>РАЙОН</span><span>ИНДЕКС</span></div>
+          <div id="district-list" class="district-list"></div>
+          <section id="district-detail" class="district-detail" aria-live="polite"></section>
+          <p class="rail-foot">Границы игровых зон и размещение проектов условные. Это не официальный план застройки.</p>
+        </aside>
+        <section class="map-area" aria-label="Карта Астаны">
+          <div id="map"></div>
+          <div class="map-caption"><span>АСТАНА / 51.16° N · 71.43° E</span><span>Карта: OpenFreeMap · OpenStreetMap</span></div>
+          <div class="legend"><strong>На карте</strong><span><i class="legend-zone"></i>Игровые зоны</span><span class="after-item"><i class="legend-school"></i>Школа</span><span class="after-item"><i class="legend-park"></i>Парк</span><span class="after-item"><i class="legend-line"></i>Транспорт</span><small class="after-item">Проекты показаны условно</small></div>
+        </section>
+      </main>
+    </div>
+    <div class="font-review" aria-label="Варианты шрифта"><span>ПРОСМОТР ШРИФТА</span><button data-font="golos" class="active">Golos Text</button><button data-font="onest">Onest</button><button data-font="plex">IBM Plex Sans</button><small>Астана · Есиль · Нұра · Қала · 68,4</small></div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "name": "astana-atlas-cloud",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:web": "vite --host 127.0.0.1",
+    "dev:backend": "node scripts/backend.mjs --reload",
+    "setup:backend": "node scripts/backend.mjs --install",
+    "test:backend": "node scripts/backend.mjs --test",
+    "test:llm": "node scripts/backend.mjs --check-llm",
+    "test:integration": "node scripts/check-integration.mjs",
+    "start": "node scripts/backend.mjs --serve",
+    "build": "npm run validate:data && tsc --noEmit && vite build",
+    "validate:data": "node scripts/validate-data.mjs",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@2gis/mapgl": "^1.78.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.3",
+    "@types/geojson": "^7946.0.16",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "jsdom": "^29.1.1",
+    "maplibre-gl": "^6.11.0",
+    "typescript": "^5.9.0",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.1"
+  }
+}

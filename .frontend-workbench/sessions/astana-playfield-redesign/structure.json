@@ -1,0 +1,215 @@
+{
+  "contractId": "astana-redesign-draft-v3",
+  "objectBindings": [
+    {
+      "forbiddenDominantObjectIds": [
+        "rendering-stack"
+      ],
+      "id": "map-object-binding",
+      "primaryObjectId": "district-scenario",
+      "supportingObjectIds": [
+        "astana-game",
+        "game-zones",
+        "demo-projects",
+        "decision-layers",
+        "scenario-metrics"
+      ],
+      "surfaceId": "astana-map"
+    }
+  ],
+  "referenceBindings": [
+    {
+      "aspects": [
+        "district selection",
+        "scenario switching",
+        "map bounds",
+        "project inspection"
+      ],
+      "constraints": [
+        "Preserve the current functional/data meaning; this reference does not approve the new visual direction."
+      ],
+      "id": "existing-behavior",
+      "mustNotInfluence": [
+        "visual composition",
+        "typography",
+        "palette"
+      ],
+      "roles": [
+        "functional-reference"
+      ],
+      "sourceRef": "src/App.tsx",
+      "sourceSha256": "d2013ba90a9ee268ebbf7da71d0c0adb26ebcfc4d4d6e1c4b4f3553c5bc1418d",
+      "surfaceIds": [
+        "astana-map"
+      ]
+    },
+    {
+      "aspects": [
+        "five game-zone polygons",
+        "districtId values"
+      ],
+      "constraints": [
+        "Preserve the current functional/data meaning; this reference does not approve the new visual direction."
+      ],
+      "id": "district-dataset",
+      "mustNotInfluence": [
+        "official administrative boundaries"
+      ],
+      "roles": [
+        "constraint"
+      ],
+      "sourceRef": "src/data/districts.geojson",
+      "sourceSha256": "b6e6a782ce2c467ac7a20a53732a50d4a48fbca0f9fcfde29129e6f5712b4161",
+      "surfaceIds": [
+        "astana-map"
+      ]
+    },
+    {
+      "aspects": [
+        "before and after indices",
+        "district names",
+        "school and park counts"
+      ],
+      "constraints": [
+        "Preserve the current functional/data meaning; this reference does not approve the new visual direction."
+      ],
+      "id": "metrics-dataset",
+      "mustNotInfluence": [
+        "measured real-world outcomes"
+      ],
+      "roles": [
+        "constraint"
+      ],
+      "sourceRef": "src/data/metrics.json",
+      "sourceSha256": "87089dbcc8bbd1d2cc177dc7449999fcf2535d4ca28c40cdd25ed9b2c2ab4590",
+      "surfaceIds": [
+        "astana-map"
+      ]
+    },
+    {
+      "aspects": [
+        "school and park coordinates",
+        "districtId values",
+        "demo markers"
+      ],
+      "constraints": [
+        "Preserve the current functional/data meaning; this reference does not approve the new visual direction."
+      ],
+      "id": "projects-dataset",
+      "mustNotInfluence": [
+        "approved construction locations"
+      ],
+      "roles": [
+        "constraint"
+      ],
+      "sourceRef": "src/data/projects.geojson",
+      "sourceSha256": "b89061b51098dcc82331cf9ab2435b85548eabd31fd8a70ac980ea8c02cc6c9b",
+      "surfaceIds": [
+        "astana-map"
+      ]
+    },
+    {
+      "aspects": [
+        "building polygons",
+        "green polygons",
+        "transport lines",
+        "service points"
+      ],
+      "constraints": [
+        "Preserve the current functional/data meaning; this reference does not approve the new visual direction."
+      ],
+      "id": "decisions-dataset",
+      "mustNotInfluence": [
+        "base-map changes"
+      ],
+      "roles": [
+        "constraint"
+      ],
+      "sourceRef": "src/data/decisions.geojson",
+      "sourceSha256": "d68abce62eff7db2dd7fc1824872c211cd6f73dcd584e24da6017c4e6e01cd66",
+      "surfaceIds": [
+        "astana-map"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "completionSurfaceId": "astana-map",
+      "entrySurfaceId": "astana-map",
+      "id": "select-district",
+      "job": "Выбрать один из пяти игровых районов на карте или в списке и увидеть его показатели.",
+      "objectIds": [
+        "district-scenario",
+        "game-zones",
+        "scenario-metrics"
+      ],
+      "recoverySurfaceIds": [
+        "astana-map"
+      ]
+    },
+    {
+      "completionSurfaceId": "astana-map",
+      "entrySurfaceId": "astana-map",
+      "id": "compare-scenarios",
+      "job": "Сравнить До и После для города и выбранного района на одной географической основе.",
+      "objectIds": [
+        "astana-game",
+        "district-scenario",
+        "scenario-metrics",
+        "decision-layers"
+      ],
+      "recoverySurfaceIds": [
+        "astana-map"
+      ]
+    },
+    {
+      "completionSurfaceId": "astana-map",
+      "entrySurfaceId": "astana-map",
+      "id": "inspect-projects",
+      "job": "Найти условную школу и парк в каждом районе и понять, какие решения добавлены сценарием.",
+      "objectIds": [
+        "district-scenario",
+        "demo-projects",
+        "decision-layers"
+      ],
+      "recoverySurfaceIds": [
+        "astana-map"
+      ]
+    }
+  ],
+  "schemaVersion": 3,
+  "shells": [
+    {
+      "id": "city-workspace",
+      "invariants": [
+        "One application shell and one map surface; slot placement is deliberately undecided until visual review.",
+        "All five district choices, current scenario, selected district and demonstration disclosure remain reachable on desktop and mobile.",
+        "District detail is contextual to the same map, not a new route or second application shell."
+      ],
+      "parentShellId": null,
+      "slots": [
+        "identity-and-scenario",
+        "map-field",
+        "district-navigation",
+        "district-detail",
+        "map-status"
+      ]
+    }
+  ],
+  "surfaces": [
+    {
+      "domainIds": [
+        "city-geography",
+        "district-scenarios",
+        "demo-projects"
+      ],
+      "id": "astana-map",
+      "route": "/",
+      "scenarioIds": [
+        "select-district",
+        "compare-scenarios",
+        "inspect-projects"
+      ]
+    }
+  ]
+}

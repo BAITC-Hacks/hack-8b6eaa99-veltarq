@@ -1,0 +1,13 @@
+{
+  "authorizedActions": [
+    "confirm-intent"
+  ],
+  "contractSha256": "2a5d0810c052c6c88157e8b2e286471af24477a22bfa8eb154c475b8aa39cb0a",
+  "kind": "user-message",
+  "messageSha256": "589d23ffa3805f49d3954ab49946568f770b01d8927dd60340b5a2935ab93a14",
+  "schemaVersion": 1,
+  "sessionId": "astana-playfield-redesign",
+  "sourceRef": "Current user reply after the Astana product-intent teach-back in this conversation",
+  "statement": "визуал слишком иишный я тебе скинул скилл действуй по нему",
+  "structureSha256": "c9b2a064fc43454f5e6baa618ef6315ec1aef1d5092cf4c74b065002ff55d44a"
+}

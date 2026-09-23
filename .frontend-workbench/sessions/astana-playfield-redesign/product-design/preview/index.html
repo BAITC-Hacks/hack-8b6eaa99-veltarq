@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f5f5ef"><title>Астана — игровая карта</title><link rel="stylesheet" href="./style.css"></head>
+<body data-panels-open="false">
+  <header class="topbar">
+    <button id="panels-menu" class="panels-menu" type="button" aria-label="Открыть меню районов" aria-expanded="false" aria-controls="district-navigation district-detail"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h16"/></svg></button>
+    <a class="identity" href="#" aria-label="Астана — весь город"><span class="identity-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>Астана</strong><small>Игровая карта города</small></span></a>
+    <div class="comparison"><div class="scenario" role="group" aria-label="Сценарий"><button id="before" aria-pressed="false">До</button><button id="after" aria-pressed="true">После</button></div><div class="city-result"><span>Индекс города</span><strong id="city-index">62,3</strong><small id="city-change">+6,2</small></div></div>
+    <button class="city-reset" id="city-reset"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5M8 12h8m-4-4v8"/></svg><span>Весь город</span></button>
+  </header>
+  <main class="workspace">
+    <div id="map" aria-label="Карта пяти игровых районов Астаны"></div>
+    <div class="map-caption"><span class="keyline"></span><span>Выберите район на карте,<br><strong>чтобы сравнить изменения.</strong></span></div>
+    <div id="map-status" class="map-status" role="status">Загружаем карту Астаны…</div>
+    <aside id="district-detail" class="district-detail" aria-label="Выбранный район"></aside>
+    <div class="map-tools"><button id="zoom-in" aria-label="Приблизить карту">+</button><button id="zoom-out" aria-label="Отдалить карту">−</button></div>
+    <details class="legend" open><summary>На карте <span aria-hidden="true">⌃</span></summary><div><span><i class="legend-building"></i>Здания</span><span><i class="legend-green"></i>Зелёные участки</span><span><i class="legend-line"></i>Транспорт</span><span><i class="legend-service">+</i>Сервисы</span></div></details>
+    <p class="demo-note">Игровые зоны и размещение проектов — демонстрационные.</p>
+  </main>
+  <div class="drawer-edge" aria-hidden="true"><span></span></div>
+  <footer id="district-navigation" class="district-navigation" aria-hidden="true" inert><div class="dock-heading"><strong>Выберите район</strong><span>Сравните, что изменится</span></div><nav id="district-list" aria-label="Игровые районы"></nav></footer>
+  <script type="module" src="./main.js"></script>
+</body></html>

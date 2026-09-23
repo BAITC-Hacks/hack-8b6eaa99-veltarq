@@ -1,0 +1,441 @@
+{
+  "authority": {
+    "contentRepartition": "within-surface-only",
+    "interactionModel": "locked",
+    "pageStructure": "revisable"
+  },
+  "capabilityRequirements": [
+    {
+      "capability": "Показывать Астану на ограниченной городской карте.",
+      "complexity": "complex",
+      "constraints": [
+        "React + TypeScript + MapLibre GL JS + OpenFreeMap; geographic base remains a background.",
+        "Preserve maxBounds [[71.20,51.035],[71.63,51.275]], whole-city framing [[71.27,51.065],[71.56,51.22]], zoom controls and whole-city reset.",
+        "Do not mutate OpenStreetMap or rebuild cartographic tiles."
+      ],
+      "id": "bounded-city-map",
+      "ownerObjectId": "game-zones",
+      "required": true,
+      "surfaceIds": [
+        "astana-map"
+      ]
+    },
+    {
+      "capability": "Выбирать и подсвечивать пять игровых зон с карточкой района.",
+      "complexity": "bounded",
+      "constraints": [
+        "Exact dataset districtId values: Есиль, Алматы, Сарыарка, Байконур, Нура; names, IDs and polygon geometry remain versioned in src/data.",
+        "Selection from polygon or accessible district control highlights the same zone and updates its contextual detail; reset clears selection.",
+        "Every district remains selectable on desktop and mobile; decorative numbering must not replace districtId."
+      ],
+      "id": "five-zone-selection",
+      "ownerObjectId": "district-scenario",
+      "required": true,
+      "surfaceIds": [
+        "astana-map"
+      ]
+    },
+    {
+      "capability": "Показывать условную школу и парк в каждом районе.",
+      "complexity": "bounded",
+      "constraints": [
+        "Preserve all ten project points: one school and one park for each of the five exact districtId values.",
+        "Project placement and game-zone boundaries are explicitly labelled as demonstration data; retain project inspection and names."
+      ],
+      "id": "demo-projects",
+      "ownerObjectId": "demo-projects",
+      "required": true,
+      "surfaceIds": [
+        "astana-map"
+      ]
+    },
+    {
+      "capability": "Показывать здания, зелёные участки, транспорт и сервисы отдельными игровыми слоями.",
+      "complexity": "complex",
+      "constraints": [
+        "Preserve building and green polygons, transport lines and service point symbols from decisions.geojson.",
+        "Layers and symbols are legible over the geographic background and have a meaningful legend."
+      ],
+      "id": "decision-overlays",
+      "ownerObjectId": "decision-layers",
+      "required": true,
+      "surfaceIds": [
+        "astana-map"
+      ]
+    },
+    {
+      "capability": "Переключать До и После с согласованным изменением игровых слоёв и показателей.",
+      "complexity": "bounded",
+      "constraints": [
+        "Before hides added project/decision layers and uses before metrics; After shows them and uses after metrics.",
+        "Keep geographic base, selected district and current camera while switching; show the active mode accessibly.",
+        "Preserve city mean index and district index, newSchools and newParks values without inventing new numerical claims."
+      ],
+      "id": "scenario-switch",
+      "ownerObjectId": "district-scenario",
+      "required": true,
+      "surfaceIds": [
+        "astana-map"
+      ]
+    },
+    {
+      "capability": "Использовать одну сохранённую версию геометрии и показателей.",
+      "complexity": "bounded",
+      "constraints": [
+        "Keep districts.geojson, metrics.json, projects.geojson and decisions.geojson as one shared repository dataset.",
+        "Baseline indices remain Есиль=62.99, Алматы=57.06, Сарыарка=54.65, Байконур=56.63, Нура=49.18.",
+        "After indices remain Есиль=68.4, Алматы=63.2, Сарыарка=60.1, Байконур=62.7, Нура=57.3; before counts=0 and after counts=1 school and 1 park per district."
+      ],
+      "id": "shared-data",
+      "ownerObjectId": "astana-game",
+      "required": true,
+      "surfaceIds": [
+        "astana-map"
+      ]
+    },
+    {
+      "capability": "Сохранять читаемость и управление на desktop и mobile.",
+      "complexity": "bounded",
+      "constraints": [
+        "UI content is Russian; chosen font must render Russian and Kazakh Cyrillic, including Ә Ғ Қ Ң Ө Ұ Ү Һ І.",
+        "Keyboard focus, labelled controls and selected state remain visible; mobile preserves map and all five district choices.",
+        "Loading or map failure must not masquerade as successful cartography; local district metrics remain inspectable where possible."
+      ],
+      "id": "legible-responsive-ui",
+      "ownerObjectId": "district-scenario",
+      "required": true,
+      "surfaceIds": [
+        "astana-map"
+      ]
+    }
+  ],
+  "checkpointMode": "review-before-implementation",
+  "contractId": "astana-redesign-draft-v3",
+  "edges": [
+    {
+      "from": "astana-map",
+      "to": "astana-map",
+      "trigger": "select district"
+    },
+    {
+      "from": "astana-map",
+      "to": "astana-map",
+      "trigger": "switch Before / After"
+    },
+    {
+      "from": "astana-map",
+      "to": "astana-map",
+      "trigger": "reset whole-city view"
+    },
+    {
+      "from": "astana-map",
+      "to": "astana-map",
+      "trigger": "reload after map failure"
+    }
+  ],
+  "implementationTargets": [],
+  "operationalMetadataPolicy": {
+    "defaultVisibility": "hidden-unless-required",
+    "requiredClaims": [
+      {
+        "authority": "user-request",
+        "id": "demo-disclosure",
+        "meaning": "Границы игровых зон, размещение проектов и сценарные показатели демонстрационные; это не официальный план застройки.",
+        "sourceRef": "conversation:user:demo-projects-and-own-geojson",
+        "states": [
+          "before-overview",
+          "after-overview",
+          "before-selected",
+          "after-selected",
+          "map-unavailable"
+        ],
+        "surfaceId": "astana-map"
+      },
+      {
+        "authority": "product-requirement",
+        "id": "map-source-attribution",
+        "meaning": "Preserve the existing cartographic provider attribution from OpenFreeMap / OpenStreetMap.",
+        "sourceRef": "src/App.tsx",
+        "states": [
+          "before-overview",
+          "after-overview",
+          "before-selected",
+          "after-selected"
+        ],
+        "surfaceId": "astana-map"
+      },
+      {
+        "authority": "product-requirement",
+        "id": "map-failure-status",
+        "meaning": "Explain that the map has not loaded and retain a clear route to retry by reloading the page.",
+        "sourceRef": "src/App.tsx",
+        "states": [
+          "map-unavailable"
+        ],
+        "surfaceId": "astana-map"
+      }
+    ]
+  },
+  "outputs": [
+    {
+      "anchorOutputId": null,
+      "approvalRequired": false,
+      "artifactKind": "none",
+      "dependsOn": [],
+      "designEvidenceRequired": false,
+      "id": "before-overview-desktop",
+      "promotionRequired": false,
+      "promotionTarget": null,
+      "runtimeEvidenceRequired": true,
+      "scrollPosition": "top",
+      "state": "before-overview",
+      "surfaceId": "astana-map",
+      "viewport": "desktop-1440x900"
+    },
+    {
+      "anchorOutputId": null,
+      "approvalRequired": false,
+      "artifactKind": "none",
+      "dependsOn": [],
+      "designEvidenceRequired": false,
+      "id": "after-overview-desktop",
+      "promotionRequired": false,
+      "promotionTarget": null,
+      "runtimeEvidenceRequired": true,
+      "scrollPosition": "top",
+      "state": "after-overview",
+      "surfaceId": "astana-map",
+      "viewport": "desktop-1440x900"
+    },
+    {
+      "anchorOutputId": null,
+      "approvalRequired": false,
+      "artifactKind": "none",
+      "dependsOn": [],
+      "designEvidenceRequired": false,
+      "id": "before-selected-desktop",
+      "promotionRequired": false,
+      "promotionTarget": null,
+      "runtimeEvidenceRequired": true,
+      "scrollPosition": "top",
+      "state": "before-selected",
+      "surfaceId": "astana-map",
+      "viewport": "desktop-1440x900"
+    },
+    {
+      "anchorOutputId": null,
+      "approvalRequired": true,
+      "artifactKind": "runnable",
+      "dependsOn": [],
+      "designEvidenceRequired": true,
+      "id": "after-selected-desktop",
+      "promotionRequired": false,
+      "promotionTarget": null,
+      "runtimeEvidenceRequired": true,
+      "scrollPosition": "top",
+      "state": "after-selected",
+      "surfaceId": "astana-map",
+      "viewport": "desktop-1440x900"
+    },
+    {
+      "anchorOutputId": null,
+      "approvalRequired": false,
+      "artifactKind": "none",
+      "dependsOn": [],
+      "designEvidenceRequired": false,
+      "id": "map-unavailable-desktop",
+      "promotionRequired": false,
+      "promotionTarget": null,
+      "runtimeEvidenceRequired": true,
+      "scrollPosition": "top",
+      "state": "map-unavailable",
+      "surfaceId": "astana-map",
+      "viewport": "desktop-1440x900"
+    },
+    {
+      "anchorOutputId": null,
+      "approvalRequired": false,
+      "artifactKind": "none",
+      "dependsOn": [],
+      "designEvidenceRequired": false,
+      "id": "before-overview-mobile",
+      "promotionRequired": false,
+      "promotionTarget": null,
+      "runtimeEvidenceRequired": true,
+      "scrollPosition": "top",
+      "state": "before-overview",
+      "surfaceId": "astana-map",
+      "viewport": "mobile-390x844"
+    },
+    {
+      "anchorOutputId": null,
+      "approvalRequired": false,
+      "artifactKind": "none",
+      "dependsOn": [],
+      "designEvidenceRequired": false,
+      "id": "after-overview-mobile",
+      "promotionRequired": false,
+      "promotionTarget": null,
+      "runtimeEvidenceRequired": true,
+      "scrollPosition": "top",
+      "state": "after-overview",
+      "surfaceId": "astana-map",
+      "viewport": "mobile-390x844"
+    },
+    {
+      "anchorOutputId": null,
+      "approvalRequired": false,
+      "artifactKind": "none",
+      "dependsOn": [],
+      "designEvidenceRequired": false,
+      "id": "before-selected-mobile",
+      "promotionRequired": false,
+      "promotionTarget": null,
+      "runtimeEvidenceRequired": true,
+      "scrollPosition": "top",
+      "state": "before-selected",
+      "surfaceId": "astana-map",
+      "viewport": "mobile-390x844"
+    },
+    {
+      "anchorOutputId": null,
+      "approvalRequired": false,
+      "artifactKind": "none",
+      "dependsOn": [],
+      "designEvidenceRequired": false,
+      "id": "after-selected-mobile",
+      "promotionRequired": false,
+      "promotionTarget": null,
+      "runtimeEvidenceRequired": true,
+      "scrollPosition": "top",
+      "state": "after-selected",
+      "surfaceId": "astana-map",
+      "viewport": "mobile-390x844"
+    },
+    {
+      "anchorOutputId": null,
+      "approvalRequired": false,
+      "artifactKind": "none",
+      "dependsOn": [],
+      "designEvidenceRequired": false,
+      "id": "map-unavailable-mobile",
+      "promotionRequired": false,
+      "promotionTarget": null,
+      "runtimeEvidenceRequired": true,
+      "scrollPosition": "top",
+      "state": "map-unavailable",
+      "surfaceId": "astana-map",
+      "viewport": "mobile-390x844"
+    }
+  ],
+  "productIntent": {
+    "antiGoals": [
+      "Не внедрять и не публиковать новый дизайн до выбора пользователем макета.",
+      "Не менять геометрию, идентификаторы и численные данные ради оформления.",
+      "Не превращать технические коды и системные подписи в основную иерархию продукта."
+    ],
+    "problem": "Переработать отвергнутый шаблонный интерфейс городской сценарной игры Астаны и сначала показать работающий макет для оценки.",
+    "protectedCapabilities": [
+      "Показывать Астану на ограниченной городской карте.",
+      "Выбирать и подсвечивать пять игровых зон с карточкой района.",
+      "Показывать условную школу и парк в каждом районе.",
+      "Показывать здания, зелёные участки, транспорт и сервисы отдельными игровыми слоями.",
+      "Переключать До и После с согласованным изменением игровых слоёв и показателей.",
+      "Использовать одну сохранённую версию геометрии и показателей.",
+      "Сохранять читаемость и управление на desktop и mobile."
+    ],
+    "representativeScenarios": [
+      "Выбрать один из пяти игровых районов на карте или в списке и увидеть его показатели.",
+      "Сравнить До и После для города и выбранного района на одной географической основе.",
+      "Найти условную школу и парк в каждом районе и понять, какие решения добавлены сценарием."
+    ],
+    "requiredDomains": [
+      "city-geography",
+      "district-scenarios",
+      "demo-projects"
+    ],
+    "successSignals": [
+      "Пользователь может оценить новый runnable-макет до реализации.",
+      "Район, сценарий и изменение показателей читаются как одна задача.",
+      "Все сохранённые игровые функции доступны на desktop и mobile."
+    ]
+  },
+  "productModel": {
+    "objects": [
+      {
+        "evidenceForObjectIds": [],
+        "id": "astana-game",
+        "parentId": null,
+        "role": "root"
+      },
+      {
+        "evidenceForObjectIds": [],
+        "id": "district-scenario",
+        "parentId": "astana-game",
+        "role": "primary"
+      },
+      {
+        "evidenceForObjectIds": [],
+        "id": "game-zones",
+        "parentId": "district-scenario",
+        "role": "supporting"
+      },
+      {
+        "evidenceForObjectIds": [],
+        "id": "demo-projects",
+        "parentId": "district-scenario",
+        "role": "supporting"
+      },
+      {
+        "evidenceForObjectIds": [],
+        "id": "decision-layers",
+        "parentId": "district-scenario",
+        "role": "supporting"
+      },
+      {
+        "evidenceForObjectIds": [
+          "district-scenario"
+        ],
+        "id": "scenario-metrics",
+        "parentId": "district-scenario",
+        "role": "downstream-evidence"
+      },
+      {
+        "evidenceForObjectIds": [],
+        "id": "rendering-stack",
+        "parentId": "astana-game",
+        "role": "implementation-detail"
+      }
+    ],
+    "relations": [],
+    "rootObjectId": "astana-game"
+  },
+  "schemaVersion": 3,
+  "structure": {
+    "id": "astana-redesign-draft-v3",
+    "path": "structure.json",
+    "sha256": "c9b2a064fc43454f5e6baa618ef6315ec1aef1d5092cf4c74b065002ff55d44a"
+  },
+  "surfaces": [
+    {
+      "id": "astana-map",
+      "kind": "screen",
+      "primaryObjectId": "district-scenario",
+      "referenceBindingIds": [
+        "existing-behavior",
+        "district-dataset",
+        "metrics-dataset",
+        "projects-dataset",
+        "decisions-dataset"
+      ],
+      "route": "/",
+      "shellIds": [
+        "city-workspace"
+      ],
+      "userJob": "Выбрать район Астаны и сравнить демонстрационный сценарий До / После."
+    }
+  ],
+  "visualArtifactPolicy": "runnable",
+  "visualDirectionPolicy": "required",
+  "workflowProfile": "full"
+}
