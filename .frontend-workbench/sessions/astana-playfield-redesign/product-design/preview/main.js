@@ -13,7 +13,47 @@ const mobile=()=>window.innerWidth<=760;
 const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const icons={school:'<path d="m3 10 9-6 9 6M5 9v11h14V9M10 20v-6h4v6M8 11h.01M16 11h.01M12 4V2h5"/>',park:'<path d="m12 3-6 8h3l-4 5h14l-4-5h3L12 3Zm0 13v5m-4 0h8"/>',service:'<path d="M12 5v14M5 12h14"/>'};
 const icon=(kind)=>`<svg viewBox="0 0 24 24" aria-hidden="true">${icons[kind]}</svg>`;
-let selectedId='Есиль',mode='after',loaded=false,popup=null;
+let selectedId=null,mode='after',loaded=false,popup=null;
+let panelMode='closed',leaveTimer,keyboardNavigation=false;
+const districtClicks=new WeakSet();
+const hoverSurfaces=[$('.drawer-edge'),$('.district-navigation'),$('#district-detail')];
+const canHover=window.matchMedia('(hover: hover) and (pointer: fine)');
+function syncPanels(){
+  const open=panelMode!=='closed';
+  document.body.dataset.panelsOpen=String(open);
+  $('.district-navigation').inert=!open;
+  $('.district-navigation').setAttribute('aria-hidden',String(!open));
+  $('#district-detail').inert=!open||!selectedId;
+  $('#district-detail').setAttribute('aria-hidden',String(!open||!selectedId));
+  $('#panels-menu').setAttribute('aria-expanded',String(open));
+  $('#panels-menu').setAttribute('aria-label',open?'Скрыть меню районов':'Открыть меню районов');
+}
+function setPanels(next){clearTimeout(leaveTimer);panelMode=next;if(next==='closed')popup?.remove();syncPanels()}
+function leavePanels(){
+  clearTimeout(leaveTimer);
+  leaveTimer=setTimeout(()=>{
+    const hovered=canHover.matches&&hoverSurfaces.some(el=>el.matches(':hover'));
+    const focused=keyboardNavigation&&hoverSurfaces.some(el=>el.contains(document.activeElement));
+    if(panelMode==='peek'&&!hovered&&!focused)setPanels('closed');
+  },160);
+}
+hoverSurfaces.forEach(el=>{
+  el.addEventListener('pointerenter',event=>{if(event.pointerType==='mouse'&&canHover.matches){clearTimeout(leaveTimer);if(panelMode!=='pinned')setPanels('peek')}});
+  el.addEventListener('pointerleave',leavePanels);
+  el.addEventListener('focusin',()=>{if(keyboardNavigation&&panelMode!=='pinned')setPanels('peek')});
+  el.addEventListener('focusout',leavePanels);
+});
+$('#panels-menu').onclick=()=>setPanels(panelMode==='closed'?'pinned':'closed');
+document.addEventListener('pointerdown',()=>keyboardNavigation=false);
+document.addEventListener('keydown',event=>{
+  if(event.key==='Tab')keyboardNavigation=true;
+  if(event.key==='Escape'&&panelMode!=='closed'){setPanels('closed');$('#panels-menu').focus()}
+});
+document.addEventListener('click',event=>{
+  const withinControls=event.composedPath().some(node=>node instanceof Element&&node.matches('.district-navigation,.district-detail,.comparison,#panels-menu,.drawer-edge,.maplibregl-popup,.project-marker'));
+  if(districtClicks.has(event)||withinControls)return;
+  setPanels('closed');
+});
 const markers=[],labels=[];
 maplibregl.setWorkerUrl(workerUrl);
 const map=new maplibregl.Map({container:'map',style:'https://tiles.openfreemap.org/styles/positron',center:[71.412,51.148],zoom:10.9,minZoom:8.5,maxZoom:15,maxBounds:[[71.20,51.035],[71.63,51.275]],dragRotate:false,pitchWithRotate:false,touchPitch:false,attributionControl:{compact:true}});
@@ -64,12 +104,14 @@ function render(){
   labels.forEach(({element,id})=>element.classList.toggle('selected',id===selectedId));
   const heading=$('.detail-heading');
   if(heading&&!mobile()){const title=document.createElement('div');title.className='detail-heading';title.innerHTML=heading.innerHTML;heading.replaceWith(title)}
+  syncPanels();
 }
-function padding(selected=false){return mobile()?{top:40,bottom:selected?130:120,left:28,right:28}:{top:70,bottom:100,left:55,right:selected?360:345}}
+function padding(selected=false){const dock=panelMode==='closed'?0:$('.district-navigation').getBoundingClientRect().height;return mobile()?{top:35,bottom:Math.min(dock+(selected?100:35),Math.max(35,$('.workspace').clientHeight*.6)),left:28,right:28}:{top:70,bottom:dock+55,left:55,right:selected?360:55}}
 function cityFit(duration=500){map.fitBounds([[71.27,51.065],[71.56,51.22]],{padding:padding(),duration:reduced?0:duration})}
-function select(id,fly=false){selectedId=id;popup?.remove();$('#district-detail').classList.remove('expanded');render();if(fly&&loaded){const f=zones.features.find(f=>f.properties.districtId===id);const b=f.geometry.coordinates[0].reduce((acc,p)=>acc.extend(p),new maplibregl.LngLatBounds());map.fitBounds(b,{padding:padding(true),maxZoom:12,duration:reduced?0:550})}}
+function select(id,fly=false){selectedId=id;popup?.remove();$('#district-detail').classList.remove('expanded');setPanels('pinned');render();if(fly&&loaded){const f=zones.features.find(f=>f.properties.districtId===id);const b=f.geometry.coordinates[0].reduce((acc,p)=>acc.extend(p),new maplibregl.LngLatBounds());map.fitBounds(b,{padding:padding(true),maxZoom:12,duration:reduced?0:550})}}
 function inspectProject(feature,fly=false){
   if(!feature||mode!=='after')return;
+  setPanels('pinned');
   if(feature.properties.districtId)select(feature.properties.districtId);
   popup?.remove();
   if(fly)map.easeTo({center:feature.geometry.coordinates,zoom:Math.max(map.getZoom(),12),offset:mobile()?[0,-35]:[-140,25],duration:reduced?0:500});
@@ -85,8 +127,8 @@ map.on('load',()=>{
   map.addSource('zones',{type:'geojson',data:zones});
   map.addLayer({id:'zone-fills',type:'fill',source:'zones',paint:{'fill-color':'#a1afb8','fill-opacity':.08}},firstLabel);
   map.addLayer({id:'zone-borders',type:'line',source:'zones',paint:{'line-color':'#73878f','line-width':1.2,'line-opacity':.5,'line-dasharray':[4,3]}},firstLabel);
-  map.addLayer({id:'selected-fill',type:'fill',source:'zones',filter:['==',['get','districtId'],selectedId],paint:{'fill-color':'#c7cfe0','fill-opacity':.23}},firstLabel);
-  map.addLayer({id:'selected-outline',type:'line',source:'zones',filter:['==',['get','districtId'],selectedId],paint:{'line-color':districtPalette(selectedId).fill,'line-width':2.5,'line-opacity':.9}});
+  map.addLayer({id:'selected-fill',type:'fill',source:'zones',filter:['==',['get','districtId'],selectedId||''],paint:{'fill-color':'#c7cfe0','fill-opacity':.23}},firstLabel);
+  map.addLayer({id:'selected-outline',type:'line',source:'zones',filter:['==',['get','districtId'],selectedId||''],paint:{'line-color':districtPalette(selectedId).fill,'line-width':2.5,'line-opacity':.9}});
   map.addSource('decisions',{type:'geojson',data:decisions});
   map.addLayer({id:'decision-green',type:'fill',source:'decisions',filter:['==',['get','kind'],'green'],paint:{'fill-color':'#789f69','fill-opacity':.72,'fill-outline-color':'#557b4c'}});
   map.addLayer({id:'decision-building',type:'fill',source:'decisions',filter:['==',['get','kind'],'building'],paint:{'fill-color':'#c2946b','fill-opacity':.85,'fill-outline-color':'#a3704c'}});
@@ -97,9 +139,9 @@ map.on('load',()=>{
   [...projects.features,...decisions.features.filter(f=>f.properties.kind==='service')].forEach(feature=>{const el=document.createElement('button');el.type='button';el.className=`project-marker ${feature.properties.kind}`;el.setAttribute('aria-label',feature.properties.name);el.innerHTML=icon(feature.properties.kind)+`<span>${feature.properties.kind==='school'?'Новая школа':feature.properties.kind==='park'?'Новый парк':'Сервис'}</span>`;el.onclick=e=>{e.stopPropagation();inspectProject(feature)};new maplibregl.Marker({element:el}).setLngLat(feature.geometry.coordinates).addTo(map);markers.push({element:el,feature})});
   map.on('click',e=>{
     const decision=mode==='after'?map.queryRenderedFeatures(e.point,{layers:['decision-building','decision-green','decision-transport']})[0]:null;
-    if(decision){inspectProject({...decision,geometry:{type:'Point',coordinates:e.lngLat.toArray()}});return}
+    if(decision){districtClicks.add(e.originalEvent);inspectProject({...decision,geometry:{type:'Point',coordinates:e.lngLat.toArray()}});return}
     const zone=map.queryRenderedFeatures(e.point,{layers:['zone-fills']})[0];
-    if(zone)select(zone.properties.districtId);
+    if(zone&&(zone.properties.districtId!==selectedId||panelMode==='closed')){districtClicks.add(e.originalEvent);select(zone.properties.districtId)}
   });
   map.on('mouseenter','zone-fills',()=>map.getCanvas().style.cursor='pointer');map.on('mouseleave','zone-fills',()=>map.getCanvas().style.cursor='');
   cityFit(0);render();
@@ -108,7 +150,7 @@ map.on('resize',()=>{if(loaded){cityFit(0);render()}});
 map.on('error',()=>{if(!loaded){$('#map-status').hidden=false;$('#map-status').innerHTML='Карта не загрузилась.<button id="retry-map">Попробовать ещё раз</button>';$('#retry-map').onclick=()=>location.reload()}});
 $('#district-list').addEventListener('click',e=>{const b=e.target.closest('[data-id]');if(b)select(b.dataset.id,true)});
 ['before','after'].forEach(id=>$('#'+id).onclick=()=>{mode=id;popup?.remove();render()});
-function reset(){selectedId=null;popup?.remove();$('#district-detail').classList.remove('expanded');render();if(loaded)cityFit()}
+function reset(){selectedId=null;popup?.remove();$('#district-detail').classList.remove('expanded');setPanels('closed');render();if(loaded)cityFit()}
 $('#city-reset').onclick=reset;$('.identity').onclick=e=>{e.preventDefault();reset()};
 $('#zoom-in').onclick=()=>map.zoomIn({duration:reduced?0:200});$('#zoom-out').onclick=()=>map.zoomOut({duration:reduced?0:200});
 if(mobile())$('.legend').open=false;

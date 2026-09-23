@@ -21,4 +21,41 @@ body>*{min-width:0}.maplibregl-map{font-family:Onest,Arial,sans-serif}
 #district-list .district-choice[aria-pressed=true] svg{fill:var(--district-fill);stroke:var(--district-fill)}
 #district-list .district-choice[data-id="Байконур"][aria-pressed=true] svg{stroke:#bcc6d5}
 .district-detail .mini-silhouette{fill:var(--district-fill);stroke:var(--district-edge)}
+/* Drawers overlay the map so opening them does not resize or move its camera. */
+body{--dock-height:156px;--panel-clearance:0px;grid-template-rows:96px minmax(0,1fr)}
+body[data-panels-open="true"]{--panel-clearance:var(--dock-height)}
+.panels-menu{display:grid;place-items:center;flex:none;width:44px;height:44px;background:transparent;border-radius:4px}
+.panels-menu:hover,.panels-menu[aria-expanded="true"]{background:#edece6}
+.panels-menu svg{width:24px;height:24px;stroke-width:2.6;stroke-linecap:round}
+.district-navigation{position:fixed;inset:auto 0 0;height:var(--dock-height);z-index:8;transform:translateY(100%);visibility:hidden;pointer-events:none;transition:transform .23s ease,visibility .23s;box-shadow:0 -3px 18px #303c6010}
+.district-detail{transform:translateX(calc(100% + 50px));opacity:0;visibility:hidden;pointer-events:none;transition:transform .23s ease,opacity .18s,visibility .23s;max-height:calc(100% - var(--panel-clearance) - 48px)}
+body[data-panels-open="true"] .district-navigation,body[data-panels-open="true"] .district-detail{transform:translate(0);opacity:1;visibility:visible;pointer-events:auto}
+.drawer-edge{position:fixed;inset:auto 0 0;height:18px;z-index:9;display:flex;justify-content:center;align-items:end;padding-bottom:4px}
+.drawer-edge span{width:58px;height:4px;background:#303c6066;border-radius:4px;box-shadow:0 1px 2px #fff}
+body[data-panels-open="true"] .drawer-edge{pointer-events:none;opacity:0}
+.legend{bottom:calc(var(--panel-clearance) + 54px)}
+.demo-note{bottom:calc(var(--panel-clearance) + 17px)}
+.map-tools{bottom:calc(var(--panel-clearance) + 28px)}
+.maplibregl-ctrl-bottom-right{bottom:calc(var(--panel-clearance) + 1px)!important}
+.legend,.demo-note,.map-tools,.maplibregl-ctrl-bottom-right{transition:bottom .23s ease}
+@media(max-width:760px){
+  body{--dock-height:117px;grid-template-rows:108px minmax(0,1fr)}
+  .topbar{grid-template-columns:36px minmax(0,1fr) auto;column-gap:8px;padding-inline:12px}
+  .panels-menu{grid-column:1;grid-row:1;width:36px;height:44px}.panels-menu svg{width:21px;height:21px}
+  .identity{grid-column:2;grid-row:1}.identity-mark{display:none}.identity strong{font-size:22px}
+  .city-reset{grid-column:3}.comparison{grid-column:1/-1}
+  .district-detail{bottom:calc(var(--panel-clearance) + 35px);transform:translateY(24px);max-height:calc(100% - var(--panel-clearance) - 50px)}
+  .district-detail.expanded{max-height:calc(100% - var(--panel-clearance) - 50px)}
+  .legend{bottom:calc(var(--panel-clearance) + 122px)}.map-tools{bottom:calc(var(--panel-clearance) + 125px)}
+  body[data-panels-open="false"] .legend{bottom:30px}body[data-panels-open="false"] .map-tools{bottom:33px}
+  .demo-note{bottom:auto}.drawer-edge{height:20px}
+}
+@media(max-width:760px) and (max-height:560px){
+  body{--dock-height:88px;grid-template-rows:97px minmax(0,1fr)}
+  .district-detail{bottom:calc(var(--panel-clearance) + 30px)}
+  .district-detail.expanded{bottom:calc(var(--panel-clearance) + 10px);max-height:calc(100% - var(--panel-clearance) - 18px)}
+  .legend{top:10px;bottom:auto!important}.map-tools{top:10px;bottom:auto!important}
+  .demo-note{bottom:calc(var(--panel-clearance) + 87px)}
+  body[data-panels-open="false"] .demo-note{bottom:19px}
+}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
