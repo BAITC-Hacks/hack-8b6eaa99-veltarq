@@ -1,0 +1,15 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","properties":{"districtId":"Есиль","kind":"school","name":"Новая школа · Есиль","symbol":"Ш","demo":true},"geometry":{"type":"Point","coordinates":[71.421,51.124]}},
+    {"type":"Feature","properties":{"districtId":"Есиль","kind":"park","name":"Новый парк · Есиль","symbol":"П","demo":true},"geometry":{"type":"Point","coordinates":[71.443,51.111]}},
+    {"type":"Feature","properties":{"districtId":"Алматы","kind":"school","name":"Новая школа · Алматы","symbol":"Ш","demo":true},"geometry":{"type":"Point","coordinates":[71.506,51.111]}},
+    {"type":"Feature","properties":{"districtId":"Алматы","kind":"park","name":"Новый парк · Алматы","symbol":"П","demo":true},"geometry":{"type":"Point","coordinates":[71.528,51.093]}},
+    {"type":"Feature","properties":{"districtId":"Сарыарка","kind":"school","name":"Новая школа · Сарыарка","symbol":"Ш","demo":true},"geometry":{"type":"Point","coordinates":[71.348,51.184]}},
+    {"type":"Feature","properties":{"districtId":"Сарыарка","kind":"park","name":"Новый парк · Сарыарка","symbol":"П","demo":true},"geometry":{"type":"Point","coordinates":[71.378,51.178]}},
+    {"type":"Feature","properties":{"districtId":"Байконур","kind":"school","name":"Новая школа · Байконур","symbol":"Ш","demo":true},"geometry":{"type":"Point","coordinates":[71.473,51.183]}},
+    {"type":"Feature","properties":{"districtId":"Байконур","kind":"park","name":"Новый парк · Байконур","symbol":"П","demo":true},"geometry":{"type":"Point","coordinates":[71.504,51.17]}},
+    {"type":"Feature","properties":{"districtId":"Нура","kind":"school","name":"Новая школа · Нура","symbol":"Ш","demo":true},"geometry":{"type":"Point","coordinates":[71.324,51.127]}},
+    {"type":"Feature","properties":{"districtId":"Нура","kind":"park","name":"Новый парк · Нура","symbol":"П","demo":true},"geometry":{"type":"Point","coordinates":[71.352,51.115]}}
+  ]
+}

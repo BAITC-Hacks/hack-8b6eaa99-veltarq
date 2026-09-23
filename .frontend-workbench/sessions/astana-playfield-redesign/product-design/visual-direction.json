@@ -1,0 +1,201 @@
+{
+  "avoid": [
+    "HUD, neon, cipher ornament and decorative operational codes.",
+    "Long left sidebar occupying the map field.",
+    "Five disconnected equal KPI cards presented as the main content.",
+    "Arbitrary district emblems unrelated to the saved GeoJSON contours.",
+    "Changing numerical claims, district identifiers, project placement or scenario behavior to suit the composition.",
+    "Novel gestures or unlabeled icon-only controls needed to perform an existing basic task."
+  ],
+  "brandPosture": "Открытый, уверенный и предметный городской инструмент. Предложение для пользовательской оценки: крупная читаемая типографика, спокойная картография и ясные проектные знаки.",
+  "colorRoles": [
+    "Географический фон: светлые нейтральные тона и спокойная вода, чтобы улицы и названия оставались видимыми под игровыми зонами.",
+    "Основной текст и выбранный район: тёмный индиго с достаточным контрастом на светлом фоне; выбор узнаётся также по форме и подписи.",
+    "Активный сценарий: тёплый охристый акцент рядом с До / После и городским результатом, используемый последовательно.",
+    "Проектные категории: насыщенные предметные знаки школы, парка, транспорта и сервиса; цвет поддержан различающейся формой и понятной легендой.",
+    "Игровые зоны: сдержанные различимые заливки с лёгкой прозрачностью; выбранная граница яснее остальных и не скрывает картографическую основу."
+  ],
+  "conceptThesis": "Астана как городское игровое поле: география занимает основное пространство, а пять районов и результаты сценария читаются как связанные части одного решения.",
+  "contentDistribution": {
+    "bands": [
+      {
+        "contentIds": [
+          "city-identity",
+          "geographic-map",
+          "scenario-control",
+          "city-index",
+          "whole-city-reset",
+          "demo-disclosure",
+          "map-attribution"
+        ],
+        "id": "map-and-overview",
+        "placement": "first-viewport",
+        "responsibilities": [
+          "Orient the user in Astana and expose the current city scenario/result.",
+          "Keep whole-city recovery, attribution and demonstration disclosure readable."
+        ]
+      },
+      {
+        "contentIds": [
+          "five-district-navigation",
+          "district-silhouettes",
+          "district-current-indices"
+        ],
+        "id": "district-dock",
+        "placement": "first-viewport",
+        "responsibilities": [
+          "Expose all five district choices along the lower edge with names and real polygon silhouettes.",
+          "Show the selected district consistently with the map and current scenario."
+        ]
+      },
+      {
+        "contentIds": [
+          "selected-district-name",
+          "selected-district-description",
+          "district-before-after",
+          "school-park-counts",
+          "project-detail"
+        ],
+        "id": "selected-district-context",
+        "placement": "on-demand",
+        "responsibilities": [
+          "Explain the selected district result and its before/after comparison.",
+          "Show project counts and enable contextual project inspection without creating a second page."
+        ]
+      },
+      {
+        "contentIds": [
+          "decision-layer-legend",
+          "map-status"
+        ],
+        "id": "map-layer-context",
+        "placement": "on-demand",
+        "responsibilities": [
+          "Explain visible building, park, transport and service symbols in the active scenario.",
+          "Provide truthful loading or map-unavailable feedback when cartography cannot be shown."
+        ]
+      }
+    ],
+    "firstViewportRule": "Сразу видны карта, текущий сценарий с городским индексом и навигация пяти районов. Выбранный район получает компактный паспорт в том же поле; отсутствие выбора не заменяется набором заглушек. На mobile паспорт контекстно появляется над нижней навигацией и оставляет доступ к карте.",
+    "mustRemainReachable": [
+      "All five district choices and exact districtId bindings on desktop and mobile.",
+      "Before and After, current city result and selected district result.",
+      "Whole-city reset, zoom controls and bounded map navigation.",
+      "School and park project inspection and all four decision-layer categories.",
+      "Demonstration disclosure, map attribution, keyboard focus and understandable map failure recovery."
+    ],
+    "sharedContentIds": [],
+    "strategy": "on-demand"
+  },
+  "densityRhythm": "Свободное поле географии окружено короткими плотными группами управления. Нижняя полоса объединяет пять равноправных районов, а единственный паспорт раскрывает выбранный. Типографический контраст отделяет результат от пояснения; текст не дробится на множество одинаковых миникарточек.",
+  "evidence": [
+    {
+      "observation": "binding:existing-behavior; functional-reference, direct: selection, scenario switching, bounded geography and contextual project inspection are existing capabilities. Inference: these can be presented through a lower district navigator and contextual passport; this binding does not prescribe the new style or preserve old composition.",
+      "sourceRef": "src/App.tsx",
+      "sourceSha256": "d2013ba90a9ee268ebbf7da71d0c0adb26ebcfc4d4d6e1c4b4f3553c5bc1418d",
+      "sourceType": "project-file"
+    },
+    {
+      "observation": "binding:district-dataset; constraint, direct: five saved game-zone polygons and their districtId values supply consistent geometry. Inference: derived silhouettes can make the same districts recognisable in navigation; these polygons do not establish official administrative boundaries.",
+      "sourceRef": "src/data/districts.geojson",
+      "sourceSha256": "b6e6a782ce2c467ac7a20a53732a50d4a48fbca0f9fcfde29129e6f5712b4161",
+      "sourceType": "project-file"
+    },
+    {
+      "observation": "binding:metrics-dataset; constraint, direct: names, before/after indices and school/park counts are shared scenario data. Inference: grouping the active mode with its result improves the comparison without inventing measured real-world outcomes.",
+      "sourceRef": "src/data/metrics.json",
+      "sourceSha256": "87089dbcc8bbd1d2cc177dc7449999fcf2535d4ca28c40cdd25ed9b2c2ab4590",
+      "sourceType": "project-file"
+    },
+    {
+      "observation": "binding:projects-dataset; constraint, direct: a demonstration school and park belong to each district. Inference: distinct subject symbols and concise contextual names can make them findable while retaining explicit demonstration status.",
+      "sourceRef": "src/data/projects.geojson",
+      "sourceSha256": "b89061b51098dcc82331cf9ab2435b85548eabd31fd8a70ac980ea8c02cc6c9b",
+      "sourceType": "project-file"
+    },
+    {
+      "observation": "binding:decisions-dataset; constraint, direct: building polygons, green polygons, transport lines and service points are separate decision geometries. Inference: map-specific symbol roles should distinguish these categories over the existing geographic background without changing that background.",
+      "sourceRef": "src/data/decisions.geojson",
+      "sourceSha256": "d68abce62eff7db2dd7fc1824872c211cd6f73dcd584e24da6017c4e6e01cd66",
+      "sourceType": "project-file"
+    }
+  ],
+  "hierarchyPrinciples": [
+    "Карта является непрерывным главным рабочим полем и занимает пространство до краёв; пяти районам принадлежит нижний навигационный край.",
+    "Переключатель До / После расположен рядом с городским индексом, чтобы действие и его результат читались вместе.",
+    "Название выбранного района, его показатель и изменение образуют один компактный паспорт справа на desktop; подробности появляются по выбору района.",
+    "На mobile выбранный район получает контекстный паспорт над нижней навигацией; карта, сценарий и возможность выбрать любой из пяти районов остаются доступны.",
+    "Подписи проектов и предметные значки объясняют школу, парк, транспорт и сервис; служебные ID не становятся заголовками интерфейса."
+  ],
+  "imageryRole": "Реальная карта и геометрия пяти сохранённых GeoJSON-полигонов являются содержательной графикой. Их упрощённые навигационные силуэты сохраняют пропорции и узнаваемый контур. Предметные знаки проектов служат легенде и поиску на карте; отдельная иллюстрация города или растровый фон не требуются.",
+  "intentionalDepartures": [
+    "Заменить длинную левую колонку нижней навигацией районов, освободив непрерывное поле карты.",
+    "Связать переключение сценария с городским результатом и показывать выбранный район одним компактным паспортом.",
+    "Заменить смеси системного гротеска и моноширинного текста единой выразительной кириллической типографикой Onest.",
+    "Сменить декоративные индексы и одинаковые рамочные блоки на содержательные силуэты районов и предметные проектные знаки."
+  ],
+  "motionTone": "Короткий понятный отклик выбора и спокойное движение карты к району. Смена сценария не перемещает камеру. Поддержка reduced motion; без бесконечных пульсаций, сканирования и декоративных загрузочных циклов.",
+  "preserveFromProjectDNA": [
+    "Пять districtId: Есиль, Алматы, Сарыарка, Байконур, Нура; сохранённые геометрия и версия данных.",
+    "MapLibre и OpenFreeMap как географическая основа с существующими городскими bounds, масштабированием и возвратом ко всему городу.",
+    "Выбор полигона или района в навигации, подсветка и согласованный паспорт.",
+    "Сценарии До / После, исходные показатели, городское среднее и существующая зависимость видимости игровых слоёв от сценария.",
+    "По одной демонстрационной школе и парку в каждом районе, слои зданий, зелёных участков, транспорта и сервисов; явная подпись условности."
+  ],
+  "redesignBoundary": {
+    "forbiddenCarryover": [
+      "Long left district sidebar plus unrelated floating metric card as the defining screen composition.",
+      "Terminal or HUD decoration, neon lime, code prefixes, decorative coordinates and system identifiers.",
+      "Repeated equal framed KPI cards with no hierarchy between city result, district result and project counts.",
+      "Tiny tracked uppercase labels, mixed monospace/body fonts and oversized introductory copy ahead of the map task.",
+      "A palette-only reskin that retains the rejected macro-layout and module topology."
+    ],
+    "mode": "greenfield",
+    "preserveRegions": [
+      {
+        "invariants": [
+          "Preserve functional behavior scoped by binding:existing-behavior: district selection, scenario switching, bounds and project inspection.",
+          "This preserves product behavior and geographic meaning only; it does not preserve the old macro-layout, palette or typography."
+        ],
+        "regionId": "geographic-and-selection-behavior",
+        "sourceRef": "src/App.tsx"
+      },
+      {
+        "invariants": [
+          "Preserve exact IDs, data values and geometries scoped by binding:district-dataset, binding:metrics-dataset, binding:projects-dataset and binding:decisions-dataset.",
+          "Navigation silhouettes derive from the five game-zone polygons and do not replace the actual map geometry.",
+          "Keep demonstration disclosure and existing cartographic attribution."
+        ],
+        "regionId": "shared-game-data",
+        "sourceRef": "src/data"
+      }
+    ],
+    "replaceRegions": [
+      {
+        "minimumChangedDimensions": 6,
+        "mustChange": [
+          "macro-layout",
+          "information-hierarchy",
+          "module-topology",
+          "typography-scale",
+          "surface-language",
+          "color-role-expression",
+          "data-visualization-form",
+          "spacing-density"
+        ],
+        "regionId": "workspace-presentation",
+        "sourceRef": "src/App.tsx"
+      }
+    ]
+  },
+  "schemaVersion": 1,
+  "signatureMove": "Район узнаётся по одному и тому же силуэту в географии и навигации. Выбранная зона связывает карту, её название и изменение показателя; сравнение сценариев всегда связано с городским результатом.",
+  "surfaceLanguage": "Светлые цельные поверхности с ясным краем и небольшой глубиной там, где панель перекрывает карту. Навигация воспринимается как единая полоса, паспорт как один документ выбранного района. Минимум рамок, без тяжёлых теней, текстур терминала и декоративной сетки.",
+  "typographyRoles": [
+    "Основной интерфейс и названия районов: Onest с уверенной средней насыщенностью и крупным читаемым кеглем; естественная кириллица важнее терминального характера.",
+    "Городской и районный показатели: тот же Onest, крупнее пояснений, с ровным ритмом цифр и одним последовательным форматом десятичных значений.",
+    "Пояснения, условность размещения и легенда: спокойный обычный регистр без разрядки; размеры сохраняют чтение на mobile.",
+    "Языковая целостность: русский и казахские буквы Ә Ғ Қ Ң Ө Ұ Ү Һ І проверяются в реально загруженном шрифте; не допускать смешанной формы глифов из случайных fallback-гарнитур."
+  ],
+  "visualTension": "Спокойная светлая карта противопоставляет плотности городских улиц несколько выразительных элементов выбора: тёмный индиго, тёплая охра и узнаваемые силуэты районов. Акцент указывает состояние или предметный проект."
+}

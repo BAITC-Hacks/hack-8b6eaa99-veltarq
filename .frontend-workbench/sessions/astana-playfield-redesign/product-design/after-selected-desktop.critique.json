@@ -1,0 +1,47 @@
+{
+  "sessionId": "astana-playfield-redesign",
+  "outputId": "after-selected-desktop",
+  "directionSha256": "dfbacca53ea21c4706619365b7b498c372382e18e101c207c3e56e64ad7f4384",
+  "artifactPath": "artifacts/after-selected-desktop.zip",
+  "artifactSha256": "9dc60565a9167d45211c77db13aa60a2f8da9a89efdc18ba7aad4d3c802f8291",
+  "verdict": "PASS",
+  "supportingEvidence": [
+    {"type": "browser-observation", "date": "2026-09-23", "viewport": "1440x900", "source": "CUA tab 10 final screenshot and read-only DOM inspection in this conversation", "observed": "Loaded geographic map; five district choices; selected Esil; full readable district panel; twelve project/service markers; no horizontal overflow; desktop title is a noninteractive DIV."},
+    {"type": "browser-observation", "date": "2026-09-23", "viewport": "390x844", "source": "CUA tab 10 screenshot and interaction observations in this conversation", "observed": "No page overflow; lower horizontally scrollable district dock; Nura reachable; expandable district panel; park action opens a named demonstration popup and collapses detail."},
+    {"type": "browser-observation", "date": "2026-09-23", "source": "CUA Before switch and accessible tree", "observed": "City index 56.1 and Esil 63.0; added markers hidden; district selection remains; After restores 62.3 and 68.4."},
+    {"type": "source-review", "source": "Independent design_audit agent", "observed": "Verified data/IDs and new topology. Four actionable issues were repaired: bounded desktop panel, separate zoom location, desktop heading semantics, decision geometry inspection."}
+  ],
+  "review": {
+    "conceptSpecificity": "PASS: real GeoJSON silhouettes repeat the geography in the district dock and selected passport. No generic hero artwork or decorative operational codes.",
+    "hierarchy": "PASS: geography owns the workspace; city scenario and city result are adjacent; one selected district carries the comparison and project actions.",
+    "execution": "PASS: restrained continuous surfaces, consistent Onest type and functional ochre/indigo selection roles. Font self-hosted with OFL; Russian and Kazakh character coverage checked against TTF cmap.",
+    "projectDNA": "PASS: exact five IDs, shared data imports, bounded camera movement, geographic attribution and explicit demonstration disclosure retained.",
+    "restraint": "PASS: no HUD texture, neon, tiny uppercase codes, repeated KPI boxes or promotional hero. Compact factual instructions only.",
+    "usability": "PASS for prototype review: desktop and mobile controls tested; mobile dock scrolls to all zones and detail expands contextually; before/after and project inspection work.",
+    "feasibility": "PASS: native buttons/details, ordinary CSS grid, MapLibre API and existing data. No new production framework required. React integration remains a later stage."
+  },
+  "redesignDelta": {
+    "regionId": "workspace-presentation",
+    "minimumChangedDimensions": 6,
+    "materialChangesWithEvidence": [
+      {"dimension": "macro-layout", "evidence": "Long left column removed; full map field with lower navigation and right contextual passport."},
+      {"dimension": "information-hierarchy", "evidence": "City control/result paired; geography first; only selected district detail expanded."},
+      {"dimension": "module-topology", "evidence": "One five-zone dock and one contextual detail replace a stacked left rail and disconnected metrics."},
+      {"dimension": "typography-scale", "evidence": "One locally served Onest family; 30px district title and 52px primary district index on desktop; readable normal case controls."},
+      {"dimension": "surface-language", "evidence": "Unified white header/dock and one lightweight overlay; no repeated hard framed blocks."},
+      {"dimension": "color-role-expression", "evidence": "Indigo selected geography/district; ochre active scenario; category colors tied to functional project icons."},
+      {"dimension": "data-visualization-form", "evidence": "Derived geographic silhouettes and shared before/current indicator connect navigation and index to district context."},
+      {"dimension": "spacing-density", "evidence": "Uninterrupted geographic field surrounded by short compact control groups; responsive collapsed mobile passport."}
+    ],
+    "forbiddenCarryoverObserved": [],
+    "preservedDataAndBehaviorEvidence": "Prototype directly imports the four existing JSON/GeoJSON datasets. Desktop/mobile visible interactions inspected. MapLibre maxBounds values preserved; documented transform constrain clamps the camera center inside those city bounds to allow an uncropped city overview at wide/short aspect ratios."
+  },
+  "unverifiedOrLimited": [
+    "This is a runnable design prototype, not production React integration or a cloud deployment.",
+    "Ten final runtime coverage obligations are not claimed complete; map-unavailable behavior has not been browser-tested.",
+    "Browser screenshots were inspected in the conversation, not saved as separate screenshot files.",
+    "Visual critique PASS means ready for user evaluation; it is not user acceptance."
+  ],
+  "requiredCorrections": [],
+  "userApproval": "pending"
+}
